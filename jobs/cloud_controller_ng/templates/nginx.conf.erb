@@ -129,6 +129,7 @@ http {
       }
 
     location ~ /internal/v4/syslog_drain_urls {
+        proxy_pass http://cloud_controller;
         proxy_cache syslog_bindings_cache;
     }
 

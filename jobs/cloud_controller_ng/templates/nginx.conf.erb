@@ -53,6 +53,7 @@ http {
 
   client_body_temp_path /var/vcap/data/cloud_controller_ng/tmp/client_body_temp;
   proxy_temp_path       /var/vcap/data/cloud_controller_ng/tmp/proxy_temp;
+  proxy_cache_path      /var/vcap/data/cloud_controller_ng/tmp/cache levels=1:2 keys_zone=syslog_bindings_cache:1m max_size=1g use_temp_path=off;
   fastcgi_temp_path     /var/vcap/data/cloud_controller_ng/tmp/fastcgi_temp;
   uwsgi_temp_path       /var/vcap/data/cloud_controller_ng/tmp/uwsgi_temp;
   scgi_temp_path        /var/vcap/data/cloud_controller_ng/tmp/scgi_temp;
@@ -125,6 +126,10 @@ http {
 
       #on any error, delete uploaded files.
       upload_cleanup 400-505;
+      }
+
+    location ~ /internal/v4/syslog_drain_urls {
+        proxy_cache syslog_bindings_cache;
     }
 
     include local_blobstore_downloads.conf;
